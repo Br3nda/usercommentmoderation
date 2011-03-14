@@ -1,0 +1,114 @@
+<?php
+// $Id$
+
+/**
+ * This module installs two tables into the system
+ * during the installation
+ * 
+ * @return 
+ */
+function user_comment_moderation_schema() {
+  $schema['user_comment_moderation'] = array(
+    'fields' => array(
+      'cid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('comment cid'),
+      ),
+      'locked_by' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('locked by moderator, this should be the moderator\'s uid'),
+      ),
+      'locked_datetime' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'description' => t('last locked datetime, use unix timestamp'),
+      ),
+      'status' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('status of user, use 1 if locked, 0 if unlocked'),
+      )
+    ),
+    'primary key' => array('cid'),
+  );
+  
+  /**
+   * This table is used to store moderator's comment on banned comment
+   * @var
+   */
+  $schema['user_comment_moderation_comment'] = array(
+    'fields' => array(
+      'id' => array(
+        'type' => 'serial',  
+        'size' => 'medium',            
+        'not null' => TRUE,
+        'description' => t('index - primary key'),
+      ),
+      'cid' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => t('user comment moderation comment cid'),
+      ),
+      'moderator_id' => array(
+        'type' => 'int',
+        'not null' => TRUE,
+        'description' => t('moderator\'s uid'),
+      ),
+      'datetime' => array(
+        'type' => 'int',
+        'not null' => FALSE,
+        'description' => t('datetime, use unix timestamp'),
+      ),
+      'comment' => array(
+        'type' => 'text',
+    	  'size' => 'medium',
+        'not null' => FALSE,
+        'description' => t('Moderator\'s comment'),
+      ),
+      'deleted_comment' => array(
+        'type' => 'text',
+    	  'size' => 'medium',
+        'not null' => FALSE,
+        'description' => t('serialized deleted comment'),
+      )
+    ),
+    'primary key' => array('id'),
+  );  
+
+  return $schema;
+}
+
+/**
+ * Implementation of hook install
+ * 
+ * @return 
+ */
+function user_comment_moderation_install() {
+  // Create tables.
+	$success = drupal_install_schema('user_comment_moderation');
+	if ($success) {
+	  drupal_set_message(st('User comment moderation installed tables successfully.'));
+  } else {
+	  drupal_set_message(st('The installation of User comment moderation failed.'), 'error');
+  }
+}
+
+/**
+ * Implementation of hook uninstall
+ * 
+ * @return 
+ */
+function user_comment_moderation_uninstall() {
+	$success = drupal_uninstall_schema('user_comment_moderation');
+  if ($success) {
+    drupal_set_message(st('User comment moderation uninstalled tables successfully.'));
+  } else {
+    drupal_set_message(st('The uninstallation of user comment moderation failed.'), 'error');
+  }
+}

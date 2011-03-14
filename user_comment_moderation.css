@@ -1,0 +1,49 @@
+/*****************************
+ * General
+ */
+.clear {clear:both;}
+
+/*****************************
+ * Accordion general
+ */
+#accordion .ui-accordion-header {padding:5px 20px 5px 30px;position:relative;}
+#accordion .ui-accordion-header:hover {cursor:pointer;}
+#accordion .ui-accordion-header .ui-icon {position:absolute;left:10px;}
+#accordion .ui-accordion-header .date {float:right;}
+#accordion .ui-state-ajax .ajax-spinner {
+  display:block;
+  width:220px;
+  height:19px;
+  background:url('images/ajax-loading-bar.gif') no-repeat scroll 0 0;
+  position:absolute;
+  left:40%;
+  top:5px;
+}
+#accordion .ui-accordion-header .error-reason {margin:0 20px;color:black;}
+#accordion .ui-accordion-header .total-comment {float:right;margin:0 40px 0 0;}
+#accordion .ui-accordion-content {padding:1em;}
+
+/*****************************
+ * Accordion buttons
+ */
+#accordion .approve,
+#accordion .delete {padding:5px;display:block;float:right;margin:0 0 0 10px;}
+#accordion .approve .text,
+#accordion .delete .text {display:block;float:right;padding:0 5px;}
+#accordion .delete .text {float:left;}
+.ui-state-default .ui-icon {float:left;}
+.ui-state-default .ui-icon-right {float:right;}
+
+/*
+ * IE Fix
+ */
+.ui-accordion-content{zoom: 1;} 
+h5.comment-title{font-weight: bold; font-size: 12px; font-style: italic;}
+
+/*****************************
+ * Comment buttons
+ */
+.comment-button,
+.comment-button li {list-style:none;list-style-type:none;padding:0;}
+.comment-button li {float:left;}
+.comment-button li a {padding: 2px 10px !important;}

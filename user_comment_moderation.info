@@ -1,0 +1,16 @@
+; $Id$
+name = User comment moderation 
+description = This module allows moderators perform comment moderation.
+core = 6.x
+
+dependencies[] = comment
+dependencies[] = flag
+dependencies[] = jquery_update
+dependencies[] = jquery_ui
+dependencies[] = colorbox
+dependencies[] = taxonomy
+
+version = "1.0"
+
+project = "User comment moderation"
+package = "Moderation"

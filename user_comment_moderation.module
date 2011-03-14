@@ -1,0 +1,133 @@
+<?php
+//$Id$
+
+function user_comment_moderation_menu() {
+  $items = array();
+  // This is administration setting URL
+  $items['admin/settings/user-comment-moderation'] = array(
+    'title' => 'User comment moderation settings',
+    'description' => 'Allow moderators assign comment to user after first post
+      comment if is checked.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('user_comment_moderation_admin'),
+    'access arguments' => array('Manage user comment moderation settings'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'user_comment_moderation_admin_settings.inc',
+  );
+  // Parent menu for moderation modules
+  $items['admin/moderation'] = array(
+    'title' => 'Moderation',
+    'description' => 'Moderation main menu.',
+    'access arguments' => array('Manage user comment moderation settings'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'user_comment_moderation_list_comments.inc',
+    'page callback' => 'ucm_list_comments',
+  );
+  // Comment listing page
+  $items['admin/moderation/list-comment'] = array(
+    'title' => 'Comment moderation',
+    'page callback' => 'ucm_list_comments',
+    'access arguments' => array('Approve user comment'),
+    'weight' => 2,
+    'file' => 'user_comment_moderation_list_comments.inc',
+  );
+  // Link to approve comment
+  $items['admin/moderation/comment/action/approve'] = array(
+    'title' => 'Approve user',
+    'page callback' => 'ucm_approve_comment',
+    'page arguments' => array(5, 6),
+    'access arguments' => array('Approve user comment'),
+    'file' => 'user_comment_moderation_ajax_call.inc',
+    'type' => MENU_CALLBACK,
+  );
+  // Link to ban comment
+  $items['admin/moderation/comment/action/delete'] = array(
+    'title' => 'Ban user',
+    'page callback' => 'ucm_delete_comment',
+    'page arguments' => array(5, 6, 7),
+    'access arguments' => array('Approve user comment'),
+    'file' => 'user_comment_moderation_ajax_call.inc',
+    'type' => MENU_CALLBACK,
+  );
+  // To check locked session
+  $items['admin/moderation/comment/action/lock'] = array(
+    'title' => 'Status check',
+    'page callback' => 'ucm_ajax_lock',
+    'page arguments' => array(5),
+    'access arguments' => array('Approve user comment'),
+    'file' => 'user_comment_moderation_ajax_call.inc',
+    'type' => MENU_CALLBACK,
+  );
+  // To check locked session
+  $items['admin/moderation/comment/action/unlock'] = array(
+    'title' => 'Status check',
+    'page callback' => 'ucm_ajax_unlock',
+    'page arguments' => array(5),
+    'access arguments' => array('Approve user comment'),
+    'file' => 'user_comment_moderation_ajax_call.inc',
+    'type' => MENU_CALLBACK,
+  );
+  // To save tid
+  $items['admin/moderation/comment/action/save-tid'] = array(
+    'title' => 'Status check',
+    'page callback' => 'ucm_ajax_save_tid',
+    'page arguments' => array(5),
+    'access arguments' => array('Approve user comment'),
+    'file' => 'user_comment_moderation_ajax_call.inc',
+    'type' => MENU_CALLBACK,
+  );
+  
+  // Link to delete single comment
+  $items['admin/moderation/comment/action/delete-single'] = array(
+    'title' => 'Ban user',
+    'page callback' => 'ucm_delete_single_comment_form',
+    'page arguments' => array(5),
+    'access arguments' => array('Approve user comment'),
+    'file' => 'user_comment_moderation_list_comments.inc',
+    'type' => MENU_CALLBACK,
+  );
+  
+  
+  
+  return $items;
+}
+
+/**
+ * Permissions for User comment moderation
+ */
+function user_comment_moderation_perm() {
+  return array(
+    'Approve user comment',
+    'Manage user comment moderation settings',
+  );
+}
+
+/**
+ * Implementation of hook_help().
+ * 
+ * @param object $path
+ * @param object $arg
+ * @return output
+ */
+function user_comment_moderation_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case "admin/help#ucm_help":
+      $output = '<p>' . t("Displays links to nodes created on this date") .
+        '</p>';
+      break;
+  }
+  return $output;
+}
+
+/**
+ * This function generates secret key to prevent Cross-Site Request Forgery 
+ * (CSRF). Keys are to be used in guard statements
+ * 
+ * @param object $input
+ * @param object $salt
+ * @return 
+ */
+function ucm_keygen($input, $salt) {
+  return MD5($input . ' + ' . $salt . ' + ' . $_SESSION['CSRF']);
+}
