@@ -46,25 +46,24 @@ function user_comment_moderation_admin() {
 	$options = ucm_get_vocabularies();
   $form['UCM_vocabs'] = array(
     '#type' => 'checkboxes',
-    '#title' => t('Select the vocabularies are used by the comments'),
+    '#title' => t('Comment Vocabulary'),
     '#default_value' => variable_get('UCM_vocabs', ''),
     '#options' => $options,
-	  '#description' => t('Select the vocabularies are used by the comments,
+	  '#description' => t('Select the vocabularies to be used by the comments.
       Only comments used by the selected vocabularies will appear on the user
       comment moderation list.'),
     '#required' => TRUE,
   );
   $form['UCM_flag'] = array(
     '#type' => 'radios',
-    '#title' => t('Mark comment with the following flag when comment is
-      approved.'),
+    '#title' => t('Approved Flag'),
     '#default_value' => variable_get('UCM_flag', ''),
     '#options' => $flags,
 	  '#description' => t('Mark comment with the following flag when comment is
-      approved. (requires Flags module)'),
+      approved. You can edit these at !link.', array('!link' => l('Flag settings', 'admin/build/flags'))),
     '#required' => TRUE,
   );
-  $default_reasons = 'SPAM\nAbusive\nNot on topic';
+  $default_reasons = "SPAM\nAbusive\nNot on topic";
   $form['UCM_reason'] = array(
     '#type' => 'textarea',
     '#title' => t('Enter the potential reasons for banning a comment'),
